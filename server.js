@@ -12,7 +12,7 @@ dotenv.config({ path: path.join(__dirname, 'config', '.env') });
 
 // Middleware setup
 app.use(cors({
-  origin: 'https://text-to-learn-frontend-iuio1kbop.vercel.app',
+  origin: 'https://text-to-learn-frontend.vercel.app',
   credentials: true
 }));
 
