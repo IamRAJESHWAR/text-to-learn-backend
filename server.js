@@ -1,21 +1,26 @@
 // Entry point for the backend application
 const express = require('express');
-const app = express();
-const cors = require('cors');
 const mongoose = require('mongoose');
+const cors = require('cors'); // Declared once here
 const dotenv = require('dotenv');
 const path = require('path');
+
+const app = express();
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, 'config', '.env') });
 
-
-const cors = require('cors');
+// Middleware setup
 app.use(cors({
   origin: 'https://text-to-learn-frontend-iuio1kbop.vercel.app',
   credentials: true
 }));
+
 app.use(express.json());
+
+// Database connection
+const connectDB = require('./config/db');
+connectDB();
 
 // API routes
 const courseRoutes = require('./routes/courses');
@@ -31,7 +36,7 @@ app.use('/api', courseRoutes);
 app.use('/api', lessonRoutes);
 app.use('/api', hinglishRoutes);
 app.use('/api', youtubeRoutes);
-app.use('/api', protectedRoutes);
+app.use('/api/protected', protectedRoutes); // Common practice to nest protected routes
 app.use('/api', examRoutes);
 app.use('/api', askRoutes);
 app.use('/api', examPaperRoutes);
@@ -43,10 +48,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.get('/', (req, res) => {
   res.send('Text-to-Learn Backend is running');
 });
-
-// Database connection
-const connectDB = require('./config/db');
-connectDB();
 
 // Start server
 const PORT = process.env.PORT || 5000;
